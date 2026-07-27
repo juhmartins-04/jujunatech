@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julia Martins da Silva — status</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F0B16;
+    --panel:#181220;
+    --line:#2C2438;
+    --foam:#F7F4FC;
+    --slate:#9C90B0;
+    --ok:#A66CFF;
+    --amber:#D9C6FF;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{ -webkit-tap-highlight-color: transparent; }
+
+  body{
+    background:
+      radial-gradient(60% 40% at 50% 0%, rgba(166,108,255,0.10), transparent 60%),
+      var(--ink);
+    color:var(--foam);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    padding: 28px 16px 60px;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .wrap{
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ---------- status strip ---------- */
+  .statusbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--slate);
+    margin-bottom: 22px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--ok);
+    box-shadow: 0 0 0 3px rgba(166,108,255,0.18);
+    flex-shrink:0;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .dot.pulse{ animation: pulse 2.4s ease-in-out infinite; }
+  }
+  @keyframes pulse{
+    0%,100%{ box-shadow: 0 0 0 3px rgba(166,108,255,0.18); }
+    50%{ box-shadow: 0 0 0 6px rgba(166,108,255,0.08); }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ text-align:center; margin-bottom: 30px; }
+
+  .avatar{
+    width:84px; height:84px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size: 26px;
+    color: var(--ok);
+    position:relative;
+  }
+  .avatar::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:50%;
+    border: 1px solid rgba(166,108,255,0.4);
+  }
+
+  h1{
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .role{
+    color: var(--ok);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing:.02em;
+  }
+
+  .loc{
+    color: var(--slate);
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .uptime{
+    margin-top: 16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--slate);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    display:inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+  .uptime b{ color: var(--foam); font-weight:600; }
+
+  /* ---------- section labels ---------- */
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color: var(--slate);
+    margin: 40px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background: var(--line);
+  }
+
+  /* ---------- primary links (linktree core) ---------- */
+  .links{ display:flex; flex-direction:column; gap:10px; }
+
+  .linkbtn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    transition: border-color .15s ease, transform .15s ease, background .15s ease;
+  }
+  .linkbtn:hover{ border-color: rgba(166,108,255,0.55); transform: translateY(-1px); }
+  .linkbtn:focus-visible{ outline:2px solid var(--ok); outline-offset:2px; }
+
+  .linkbtn .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    color: var(--ink);
+    background: var(--ok);
+    padding: 2px 6px;
+    border-radius:4px;
+    flex-shrink:0;
+    font-weight:600;
+  }
+  .linkbtn.primary .tag{ background: var(--amber); }
+
+  .linkbtn .label{ flex:1; }
+  .linkbtn .title{ font-size:14.5px; font-weight:500; }
+  .linkbtn .sub{ font-size:12px; color:var(--slate); margin-top:1px; }
+  .linkbtn .arrow{ color:var(--slate); font-family:'IBM Plex Mono', monospace; font-size:14px; }
+
+  /* ---------- about panel ---------- */
+  .about{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    font-size: 14px;
+    color: var(--slate);
+  }
+  .about .head{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--foam);
+    font-size:12px;
+    margin-bottom: 10px;
+  }
+  .about .head span{ color: var(--ok); }
+
+  /* ---------- project cards ---------- */
+  .cards{ display:flex; flex-direction:column; gap:12px; }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom: 8px;
+  }
+  .card-name{ font-size:15px; font-weight:600; }
+  .badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing:.04em;
+    color: var(--ok);
+    border:1px solid rgba(166,108,255,0.4);
+    padding: 3px 8px;
+    border-radius: 999px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .card-desc{ font-size:13.5px; color:var(--slate); margin-bottom: 12px; }
+  .stack{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .stack span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--slate);
+    background: var(--ink);
+    border:1px solid var(--line);
+    padding:3px 8px;
+    border-radius:6px;
+  }
+  .card-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color: var(--ok);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .card-link:hover{ text-decoration:underline; }
+
+  /* ---------- skills grid ---------- */
+  .skills{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+  }
+  .skill{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .skill .name{ font-size:13px; font-weight:500; margin-bottom:6px; display:flex; align-items:center; gap:7px;}
+  .skill .items{ font-size:11.5px; color:var(--slate); font-family:'IBM Plex Mono', monospace; line-height:1.6; }
+
+  /* ---------- changelog / timeline ---------- */
+  .log{ position:relative; padding-left: 22px; }
+  .log::before{
+    content:"";
+    position:absolute; left:5px; top:6px; bottom:6px;
+    width:1px; background: var(--line);
+  }
+  .entry{ position:relative; padding-bottom: 22px; }
+  .entry:last-child{ padding-bottom:0; }
+  .entry::before{
+    content:"";
+    position:absolute; left:-22px; top:4px;
+    width:9px; height:9px; border-radius:50%;
+    background: var(--ink); border: 2px solid var(--ok);
+  }
+  .entry .date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    margin-bottom: 4px;
+  }
+  .entry .role{ font-size: 14.5px; font-weight:600; }
+  .entry .company{ font-size: 12.5px; color: var(--slate); margin-bottom: 6px; }
+  .entry .desc{ font-size: 12.5px; color: var(--slate); }
+
+  /* ---------- footer cta ---------- */
+  .footer{
+    margin-top: 46px;
+    text-align:center;
+  }
+  .footer .cta{
+    display:inline-block;
+    background: var(--ok);
+    color: var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size: 13.5px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .footer .cta:hover{ transform: translateY(-1px); opacity:.92; }
+  .footer .cta:focus-visible{ outline:2px solid var(--foam); outline-offset:3px; }
+
+  .footer .fine{
+    margin-top:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+  }
+  .footer .fine a{ color: var(--slate); }
+  .footer .fine a:hover{ color: var(--ok); }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="statusbar">
+    <span class="dot pulse"></span> sistema operacional
+  </div>
+
+  <div class="hero">
+    <div class="avatar">JM</div>
+    <h1>Julia Martins da Silva</h1>
+    <div class="role mono">analista de suporte // desenvolvimento front-end</div>
+    <div class="loc">Curitiba, PR — Brasil</div>
+    <div class="uptime">operacional há <b id="uptime-text">calculando…</b></div>
+  </div>
+
+  <div class="eyebrow">acesso rápido</div>
+  <div class="links">
+    <a class="linkbtn primary" href="https://www.instagram.com/jujunatech/" target="_blank" rel="noopener">
+      <span class="tag">live</span>
+      <span class="label">
+        <div class="title">@jujunatech no Instagram</div>
+        <div class="sub">bastidores da transição suporte → dev</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+    <a class="linkbtn" href="https://www.linkedin.com/in/julia-martinsdev" target="_blank" rel="noopener">
+      <span class="tag">prod</span>
+      <span class="label">
+        <div class="title">LinkedIn</div>
+        <div class="sub">trajetória profissional completa</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+    <a class="linkbtn" href="https://github.com/juhmartins-04" target="_blank" rel="noopener">
+      <span class="tag">prod</span>
+      <span class="label">
+        <div class="title">GitHub</div>
+        <div class="sub">repositórios e código-fonte</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+    <a class="linkbtn" href="https://www.figma.com/@juhmartins_s" target="_blank" rel="noopener">
+      <span class="tag">prod</span>
+      <span class="label">
+        <div class="title">Figma</div>
+        <div class="sub">protótipos e UI/UX</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+    <a class="linkbtn" href="curriculo-julia-martins.pdf" target="_blank" rel="noopener">
+      <span class="tag">pdf</span>
+      <span class="label">
+        <div class="title">Currículo</div>
+        <div class="sub">versão completa para download</div>
+      </span>
+      <span class="arrow">↓</span>
+    </a>
+    <a class="linkbtn" href="mailto:juliamsilva2000@gmail.com">
+      <span class="tag">mail</span>
+      <span class="label">
+        <div class="title">Abrir novo chamado</div>
+        <div class="sub">juliamsilva2000@gmail.com</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <div class="eyebrow">readme</div>
+  <div class="about">
+    <div class="head">$ <span>cat</span> sobre.md</div>
+    Profissional de TI com passagem por suporte N1/N2 e virada de chave para o front-end.
+    Hoje transito entre resolver incidentes, integrar APIs REST e construir interfaces —
+    entendendo tanto o problema do usuário quanto o código por trás da solução.
+    Formada em Análise e Desenvolvimento de Sistemas (2024).
+  </div>
+
+  <div class="eyebrow">serviços em produção</div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-top">
+        <div class="card-name">Decorhelp — Sistema de Chamados</div>
+        <div class="badge">estável</div>
+      </div>
+      <div class="card-desc">Sistema de abertura, acompanhamento e organização de chamados, simulando uma rotina real de suporte técnico.</div>
+      <div class="stack"><span>API REST</span><span>MySQL</span></div>
+      <a class="card-link" href="https://github.com/juhmartins-04/decorhelp-sistema-chamados" target="_blank" rel="noopener">ver repositório →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div class="card-name">Clima — App em ReactJS</div>
+        <div class="badge">estável</div>
+      </div>
+      <div class="card-desc">Aplicação web que consome uma API pública de previsão do tempo, com atualização dinâmica da interface.</div>
+      <div class="stack"><span>ReactJS</span><span>JavaScript</span><span>API</span></div>
+      <a class="card-link" href="https://github.com/juhmartins-04/clima" target="_blank" rel="noopener">ver repositório →</a>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <div class="card-name">Bikcraft — Case de UI/UX</div>
+        <div class="badge">deploy</div>
+      </div>
+      <div class="card-desc">Protótipo de interface com foco em hierarquia visual, usabilidade e boas práticas de UI, incluindo landing page.</div>
+      <div class="stack"><span>Figma</span><span>UI/UX</span></div>
+      <a class="card-link" href="https://www.figma.com/community/file/1567174168379034870/bikcraft-projeto" target="_blank" rel="noopener">ver protótipo →</a>
+    </div>
+
+  </div>
+
+  <div class="eyebrow">stack monitorada</div>
+  <div class="skills">
+    <div class="skill">
+      <div class="name"><span class="dot"></span>Suporte & Infra</div>
+      <div class="items">N1/N2 · Windows Server<br>Active Directory · DNS<br>RDP · Zabbix</div>
+    </div>
+    <div class="skill">
+      <div class="name"><span class="dot"></span>Front-end</div>
+      <div class="items">HTML · CSS<br>JavaScript · ReactJS<br>PHP</div>
+    </div>
+    <div class="skill">
+      <div class="name"><span class="dot"></span>Integrações & Dados</div>
+      <div class="items">API REST · Webhooks<br>JSON · Postman</div>
+    </div>
+    <div class="skill">
+      <div class="name"><span class="dot"></span>QA & UX</div>
+      <div class="items">Testes manuais/auto<br>Validação de APIs<br>Figma</div>
+    </div>
+    <div class="skill">
+      <div class="name"><span class="dot"></span>Versionamento</div>
+      <div class="items">Git · GitHub<br>Azure DevOps</div>
+    </div>
+    <div class="skill">
+      <div class="name"><span class="dot"></span>Dados</div>
+      <div class="items">SQL</div>
+    </div>
+  </div>
+
+  <div class="eyebrow">log de atividades</div>
+  <div class="log">
+
+    <div class="entry">
+      <div class="date mono">OUT–DEZ 2025</div>
+      <div class="role">Analista de Desenvolvimento de Sistemas</div>
+      <div class="company">Upchat — Grupo Upgrade</div>
+      <div class="desc">Integrações via API REST/Webhooks, resolução de incidentes pós-implantação, automação de fluxos.</div>
+    </div>
+
+    <div class="entry">
+      <div class="date mono">JAN–AGO 2025</div>
+      <div class="role">Assistente de TI</div>
+      <div class="company">Decorlux Materiais Elétricos</div>
+      <div class="desc">Suporte N1/N2, Windows Server/AD/DNS, apoio em desenvolvimento com React, PHP e JS.</div>
+    </div>
+
+    <div class="entry">
+      <div class="date mono">SET 2023–ABR 2024</div>
+      <div class="role">Assistente de TI</div>
+      <div class="company">Grupo Positivo</div>
+      <div class="desc">Gestão de acessos via Active Directory, atendimento N1, contas e e-mails corporativos.</div>
+    </div>
+
+    <div class="entry">
+      <div class="date mono">OUT 2022–JAN 2023</div>
+      <div class="role">Assistente de Desenvolvimento / QA</div>
+      <div class="company">Agência Red</div>
+      <div class="desc">Testes manuais e automatizados (Postman), reporte de bugs, versionamento com Git.</div>
+    </div>
+
+    <div class="entry">
+      <div class="date mono">JUL 2021–OUT 2022</div>
+      <div class="role">Analista de Dev Júnior → Helpdesk</div>
+      <div class="company">Vega I.T</div>
+      <div class="desc">Interfaces front-end com React/HTML/CSS/JS; suporte N1/N2 e monitoramento com Zabbix.</div>
+    </div>
+
+    <div class="entry">
+      <div class="date mono">FEV 2020–JUN 2021</div>
+      <div class="role">Estágio de Suporte Técnico</div>
+      <div class="company">Vega I.T</div>
+      <div class="desc">Diagnóstico de sistemas operacionais e triagem de chamados — o início de tudo.</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <a class="cta" href="mailto:juliamsilva2000@gmail.com">abrir novo chamado →</a>
+    <div class="fine">
+      feito por <a href="https://www.instagram.com/jujunatech/" target="_blank" rel="noopener">@jujunatech</a> · Curitiba, PR
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var start = new Date(2020, 1, 1); // Fev/2020
+    var el = document.getElementById('uptime-text');
+
+    function render(){
+      var now = new Date();
+      var months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+      if (now.getDate() < start.getDate()) months--;
+      var years = Math.floor(months / 12);
+      var remMonths = months % 12;
+      var parts = [];
+      if (years > 0) parts.push(years + (years === 1 ? ' ano' : ' anos'));
+      parts.push(remMonths + (remMonths === 1 ? ' mês' : ' meses'));
+      el.textContent = parts.join(' e ');
+    }
+    render();
+  })();
+</script>
+
+</body>
+</html>
