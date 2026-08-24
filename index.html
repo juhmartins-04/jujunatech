@@ -313,6 +313,37 @@
   .footer .fine a{ color: var(--slate); }
   .footer .fine a:hover{ color: var(--ok); }
 
+  /* ---------- destaque fixado ---------- */
+  .pin{
+    background: var(--panel);
+    border: 1px solid var(--amber);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  .pin-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing:.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .pin-title{ font-size: 19px; font-weight:600; margin-bottom: 6px; }
+  .pin-desc{ font-size: 13.5px; color: var(--slate); margin-bottom: 16px; }
+  .pin-cta{
+    display:inline-block;
+    background: var(--amber);
+    color: var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size: 13px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .pin-cta:hover{ transform: translateY(-1px); opacity:.92; }
 </style>
 </head>
 <body>
@@ -330,10 +361,25 @@
     <div class="uptime">operacional há <b id="uptime-text">calculando…</b></div>
   </div>
 
+  <div class="pin">
+    <div class="pin-tag">📌 em destaque agora</div>
+    <div class="pin-title">Construindo o Prontô</div>
+    <div class="pin-desc">Meu produto próprio: um assistente de atendimento via WhatsApp pra pequenos negócios, do zero ao ar — direto aqui do Curitiba.</div>
+    <a class="pin-cta" href="https://usarpronto.vercel.app/p/4677019b-8703-4fcc-8b75-dd83b63487c3" target="_blank" rel="noopener">ver o Prontô funcionando →</a>
+  </div>
+
   <div class="eyebrow">acesso rápido</div>
   <div class="links">
-    <a class="linkbtn primary" href="https://www.instagram.com/jujunatech/" target="_blank" rel="noopener">
+    <a class="linkbtn primary" href="https://usarpronto.vercel.app/julia.html" target="_blank" rel="noopener">
       <span class="tag">live</span>
+      <span class="label">
+        <div class="title">Prontô</div>
+        <div class="sub">demonstração, WhatsApp e apresentação completa</div>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+    <a class="linkbtn" href="https://www.instagram.com/jujunatech/" target="_blank" rel="noopener">
+      <span class="tag">prod</span>
       <span class="label">
         <div class="title">@jujunatech no Instagram</div>
         <div class="sub">bastidores da transição suporte → dev</div>
